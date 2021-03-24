@@ -1,21 +1,13 @@
 import {dropDown, BigContainer, BootstrapContainer, AppHeading, column, row, button, containerHeading} from './component/container';
+import {GetWeatherById} from './service/store'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.css'
 import logo from './asset/image/download.jpeg'
 
-var WeatherContainer = {
-    date: "Date of observation",
-    country: "Country",
-    city: "City name",
-    temp: "Temperature",
-    sunrise: "Suns up at",
-    weatherLogo: function(){
-        var logo = document.createElement("img");
-        logo.src = "https://www.weatherbit.io/static/img/icons/c04d.png"
-        return logo
-    }
-}
+window.onload = GetWeatherById("copenhagen")
 
+//var object = GetWeatherById("london")
+//console.log(object)
 
 var cities = ['copenhagen', 'london', 'berlin']
 
@@ -42,6 +34,7 @@ function InteractionView(){
 function CurrentWeatherView(){
     var columnTwo = column("column");
     var headingContainer = containerHeading("Current Weather", "ContainerHeader")
+    
     
     columnTwo.appendChild(headingContainer)
     return columnTwo
