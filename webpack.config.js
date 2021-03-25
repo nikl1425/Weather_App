@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   mode: "development",
-  entry: ['./src/app.js'],
+  entry: ['./src/app.js', 'babel-polyfill'],
   
   output: {
     filename: '[name].bundle.js',
@@ -22,8 +22,9 @@ module.exports = {
   
   module: {
       rules: [
-          {
-              test: /\.js$/,
+         //INSERT BABEL CODE HERE
+         {
+         test: /\.js$/,
               exclude: /node_modules/,
               use: {
                   loader: 'babel-loader',
@@ -43,3 +44,15 @@ module.exports = {
       ]
   }
 };
+
+/* {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              use: {
+                  loader: 'babel-loader',
+                  options: {
+                      presets: ['@babel/preset-env']
+                  }
+              }
+          },
+          */
