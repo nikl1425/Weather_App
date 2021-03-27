@@ -25,6 +25,15 @@ export const column = (nameOfClass) => {
     return _column
 }
 
+export const standardColumn = (id) => {
+    var _column = document.createElement("div");
+    _column.className = `col`
+    _column.id = `${id}`
+    return _column
+}
+
+
+
 export const row = (nameOfClass) => {
     var _row = document.createElement("div");
     _row.className = `row ${nameOfClass}`;
@@ -196,5 +205,53 @@ export const dataTable = (country, city, date, sunrise, sundown, temp, descrip, 
 }
 
     
+export function ForecastTable(list){
+    var container = document.createElement("div")
+    container.className = "row"
+    
+    var col_list = [];
 
+    
+
+    for (let i = 0; i< list.length; i++) {
+        var row = document.createElement("div");
+        row.className = "col-3";
+        col_list.push(row);
+    }
+    for (let i = 0; i < list.length; i++) {
+        var element_date = list[i].datetime;
+        var element_temp = `${list[i].temp} celsius`;
+        var element_description = list[i].weather.description;
+        
+        var tableElementDate = document.createElement("div");
+        tableElementDate.className = "ForecastDate"
+        tableElementDate.innerHTML = element_date;
+
+        var tableElementTemp = document.createElement("div");
+        tableElementTemp.className = "ForecastElement"
+        tableElementTemp.innerHTML = element_temp;
+
+        var tableElementDesc = document.createElement("div");
+        tableElementDesc.className = "ForecastElement"
+        tableElementDesc.innerHTML = element_description;
+
+        var tableElementLogo = document.createElement("img");
+        tableElementLogo.className = "ForecastElementLogo"
+        tableElementLogo.src = `https://www.weatherbit.io/static/img/icons/${list[i].weather.icon}.png`;
+
+
+        col_list[i].appendChild(tableElementDate);
+        col_list[i].appendChild(tableElementTemp);
+        col_list[i].appendChild(tableElementDesc);
+        col_list[i].appendChild(tableElementLogo);
+        
+    }
+    
+    
+    col_list.forEach(element => {
+        container.appendChild(element)
+    });
+
+    return container;
+}
 

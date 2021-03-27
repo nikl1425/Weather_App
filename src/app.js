@@ -1,8 +1,8 @@
-import {dropDown, BigContainer, BootstrapContainer, AppHeading, column, row, button, containerHeading, dataTable} from './component/container';
+import {dropDown, BigContainer, BootstrapContainer, AppHeading, column, row, button, containerHeading, dataTable, standardColumn, ForecastTable} from './component/container';
 import {GetWeatherById, Weather, fetchTableData, fiveDaysWeather} from './service/store'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.css'
-import logo from './asset/image/download.jpeg'
+
 
 
 /*
@@ -40,8 +40,67 @@ window.onload = () => {
     
 };
 
-function myvar(){
-    fiveDaysWeather("copenhagen").then(data => console.log(data))
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+function GetNextFiveDays (){
+    var today = new Date();
+    today.setHours(12,0,0,0)
+    var days = [];
+    var newFormatedDays = []
+    for (let i = 1; i < 5; i++) {
+        var datestring = today.getUTCFullYear() + "-" + (today.getUTCMonth()+1) + "-" + (today.getUTCDate()+i)
+        days.push(datestring)
+    }
+
+    days.forEach(element => {
+        var newday = formatDate(element)
+        newFormatedDays.push(newday)
+    });
+
+
+    return newFormatedDays
+}
+
+function FourDaysForecast(value){
+    var container = document.getElementById("ForecastContainer");
+
+    while (container.hasChildNodes()){
+        container.removeChild(container.lastChild);
+    }
+
+    fiveDaysWeather(value).then(sequence => {
+        console.log(typeof(sequence[0].datetime) + " : " + sequence[0].datetime)
+        var listOfDays = GetNextFiveDays();
+        var chosenElement = []
+        
+        
+        sequence.forEach(element => {
+            if(listOfDays.includes(element.datetime)){
+                chosenElement.push(element)
+            }
+        });
+        console.log(chosenElement)
+        var tableOfForecast = ForecastTable(chosenElement)
+       
+        container.appendChild(tableOfForecast)
+       
+       
+    })
+
+    
 }
 
 
@@ -56,7 +115,7 @@ function InteractionView(){
         var dropdownValue = document.getElementById("DropDownButton");
         var value = dropdownValue.value
         UpdateTable(value)
-        myvar();
+        FourDaysForecast(value);
     }
     columnOne.appendChild(headingContainer)
     columnOne.appendChild(dropDown(cities, "SubmitBtn"))
@@ -101,10 +160,15 @@ function SetupView() {
     var _CurrentWeatherView = CurrentWeatherView()
     var appHeading = AppHeading("Weather Application")
     var rowOne = row("Row");
+    var rowTwo = row("Row2");
+    var col = standardColumn("ForecastContainer");
+    rowTwo.appendChild(col)
+
     rowOne.appendChild(_InteractionView)
     rowOne.appendChild(_CurrentWeatherView)
     appViewContainer.appendChild(appHeading)
     appViewContainer.appendChild(rowOne)
+    appViewContainer.appendChild(rowTwo)
     bootstrapContainer.appendChild(appViewContainer)
    
     return bootstrapContainer

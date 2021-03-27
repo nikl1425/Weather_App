@@ -47,7 +47,7 @@ export function fetchTableData(city) {
         return fetch(`https://api.weatherbit.io/v2.0/current?city=${city}&key=${API_KEY}&include=minutely`)
         .then(result => result.json())
         .then(data => {
-            
+
             resolve(data.data[0])
             })
     });
@@ -57,12 +57,11 @@ export function fetchTableData(city) {
   
 export function fiveDaysWeather(city){
     var container = {};
-    return fetch(`https://api.weatherbit.io/v2.0/forecast/hourly?city=${city}&key=${API_KEY}&hours=120`)
+    return fetch(`https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${API_KEY}`)
     .then(response => response.json())
     .then(resp => {
-        container.weather = resp.data[0].solar_rad
-        container.pod = resp.data[0].pod
-        return container
+        var sequence = resp.data;
+        return sequence;
     })
             
     
